@@ -1,17 +1,89 @@
-# Automated Attendance System
+# 🎓 ClassConnect
+### Offline Smart Attendance System for Rural Schools
 
-This is a simple web-based system to perform face-recognition-based attendance for rural schools.
+A camera-based student attendance system designed for rural schools that automates attendance marking using face recognition and works even without internet connectivity.
 
-## Features
-- Enroll students using webcam
-- Capture attendance via face recognition
-- View list of present students
-- Export attendance as CSV
+---
 
-## How to Use
-1. Open `index.html` in a browser.
-2. Navigate using the menu to enroll students, take attendance, or export.
-3. Data is stored locally in the browser using IndexedDB.
+## 📖 Overview
+**ClassConnect** is a smart attendance prototype that reduces manual register-based attendance in rural schools.  
+It captures student faces via webcam, compares them with a stored dataset, and marks attendance automatically.  
+Supports **offline storage** and syncs records when internet becomes available.
 
-Note: Requires webcam access and works best in Chrome.
-"# CLASS_CONNECT" 
+---
+
+## 🚩 Problem Statement
+Manual registers in rural schools:
+- Consume teaching time
+- Increase teacher workload
+- Are prone to human error
+- Lack quick reporting/insights
+- Depend entirely on paperwork
+
+ClassConnect offers a simple digital workflow to solve these issues.
+
+---
+
+## ✨ Features
+- 📷 **Face Recognition Attendance**: Capture faces, match with dataset, mark attendance automatically.  
+- 🌐 **Offline Support**: Works without internet, stores locally, syncs when online.  
+- 🧑‍🏫 **Manual Override**: Teachers can correct mismatches or mark manually.  
+- 📊 **Visualization**: Attendance percentage charts and student presence summaries.  
+- ⏱️ **Time Efficient**: Reduces roll-call time and improves classroom efficiency.  
+
+---
+
+## 🏗️ System Workflow
+Camera Capture → Dataset Matching → Attendance Marking → Local Storage → Internet Sync
+
+---
+
+## 🧠 Technologies Used
+| Component         | Technology                       |
+| ----------------- | -------------------------------- |
+| Interface         | HTML                             |
+| Styling           | CSS                              |
+| Logic             | JavaScript                       |
+| Recognition Model | Dataset comparison (prototype)   |
+| Storage           | IndexedDB (local browser DB)     |
+| Export            | CSV                              |
+
+---
+
+## 📁 Project Modules
+- Student enrollment via webcam  
+- Dataset matching module  
+- Automatic attendance marking  
+- Offline storage with sync  
+- Manual correction option  
+- Attendance visualization graphs  
+
+---
+
+## 🚀 Future Improvements
+- OpenCV-based face recognition integration  
+- Improved recognition accuracy  
+- Cloud database synchronization  
+- Mobile access support  
+- Admin dashboard & automated reports  
+
+---
+
+## 🎓 Learning Outcomes
+- Designed a smart attendance workflow prototype  
+- Implemented dataset-based student identification logic  
+- Created an offline-first attendance system concept  
+- Built visualization support for attendance tracking  
+- Developed a digital alternative to manual registers  
+
+---
+
+## 📦 How to Use
+1. Open `index.html` in a browser.  
+2. Use the menu to **enroll students**, **take attendance**, or **export CSV**.  
+3. Data is stored locally in the browser using **IndexedDB**.  
+4. Requires webcam access (best in Chrome).  
+
+---
+
+**ClassConnect — Simple Attendance. Smart Future.**
