@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      /* Add your background image below */
+      /* Example: background: url('your-image.jpg') no-repeat center center fixed; */
+      background: url('teach.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+    }
+    .profile-container {
+      background: linear-gradient(135deg, #f8fafc 60%, #e3f0ff 100%);
+      max-width: 600px;
+      min-width: 320px;
+      margin: 60px auto 0 auto;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(25, 118, 210, 0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+      padding: 48px 40px 36px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .profile-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1976d2;
+      margin-bottom: 32px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    }
+    .profile-field {
+      width: 100%;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(25,118,210,0.04);
+      padding: 8px 12px;
+      transition: box-shadow 0.2s;
+    }
+    .profile-label {
+      font-weight: 600;
+      color: #1976d2;
+      font-size: 1rem;
+      min-width: 120px;
+      letter-spacing: 0.3px;
+    }
+    .profile-value {
+      font-size: 1rem;
+      color: #222;
+      background: #f4f8fb;
+      border-radius: 6px;
+      padding: 6px 12px;
+      min-width: 100px;
+      flex: 1;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      border: 1px solid #e3eaf5;
+      box-shadow: 0 0.5px 2px rgba(25,118,210,0.03);
+    }
+    .edit-btn {
+      margin-top: 18px;
+      padding: 12px 36px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.13rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+      transition: background 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .edit-btn:hover {
+      background: linear-gradient(90deg, #125ea8 60%, #1976d2 100%);
+      box-shadow: 0 4px 16px rgba(25,118,210,0.13);
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <div class="profile-title">User Profile</div>
+    <div class="profile-field">
+      <span class="profile-label">First Name</span>
+      <span class="profile-value" id="firstName">John</span>
+    </div>
+    <div class="profile-field">
+      <span class="profile-label">Last Name</span>
+      <span class="profile-value" id="lastName">Doe</span>
+    </div>
+    <div class="profile-field">
+      <span class="profile-label">Phone Number</span>
+      <span class="profile-value" id="phone">9876543210</span>
+    </div>
+    <div class="profile-field">
+      <span class="profile-label">Email</span>
+      <span class="profile-value" id="email">john.doe@example.com</span>
+    </div>
+    <div class="profile-field">
+      <span class="profile-label">Number of Allocated Classes</span>
+      <span class="profile-value" id="allocatedClasses">3</span>
+    </div>
+    <div class="profile-field">
+      <span class="profile-label">Year of Joined</span>
+      <span class="profile-value" id="yearJoined">2022</span>
+    </div>
+    <button class="edit-btn" onclick="alert('Edit functionality coming soon!')">Edit Profile</button>
+  </div>
+  <script>
+    // Example: Load user data from localStorage/sessionStorage if available
+    const user = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    if(user.firstName) document.getElementById('firstName').innerText = user.firstName;
+    if(user.lastName) document.getElementById('lastName').innerText = user.lastName;
+    if(user.phone) document.getElementById('phone').innerText = user.phone;
+    if(user.email) document.getElementById('email').innerText = user.email;
+    if(user.allocatedClasses) document.getElementById('allocatedClasses').innerText = user.allocatedClasses;
+    if(user.yearJoined) document.getElementById('yearJoined').innerText = user.yearJoined;
+  </script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manual Attendance</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #f4f8fb;
+      font-family: 'Poppins', sans-serif;
+    }
+    .main-header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 28px 40px 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: 1px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .save-btn {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .save-btn:hover {
+      background: #125ea8;
+    }
+    .switch-face-btn {
+      background: #fff;
+      color: #1976d2;
+      border: 2px solid #1976d2;
+      border-radius: 7px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .switch-face-btn:hover {
+      background: #1976d2;
+      color: #fff;
+    }
+    .container {
+      max-width: 1600px;
+      width: calc(100% - 80px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .box {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      padding: 24px 32px;
+      width: 100%;
+      min-width: 0;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      box-sizing: border-box;
+    }
+    .top-bar .bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 160px;
+    }
+    .top-bar label {
+      font-weight: 600;
+      color: #1976d2;
+      font-size: 1.05rem;
+      margin-bottom: 2px;
+    }
+    .top-bar select, .top-bar input[type="date"], .top-bar input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      font-size: 1rem;
+      background: #f8fafd;
+      width: 100%;
+    }
+    .top-bar .search-bar {
+      flex: 1;
+      min-width: 220px;
+    }
+    .summary-bar > div {
+      font-size: 1.13rem;
+      font-weight: 600;
+      color: #1976d2;
+      margin-right: 40px;
+    }
+    .profile-bar {
+      gap: 24px;
+      overflow-x: auto;
+      justify-content: flex-start;
+    }
+    .student-profile-card {
+      background: #f8fafd;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 160px;
+      max-width: 180px;
+      border: 2px solid #e0e0e0;
+      box-sizing: border-box;
+    }
+    .student-profile-card img {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .student-profile-card .name {
+      font-weight: 700;
+      font-size: 1.07rem;
+      margin-bottom: 2px;
+    }
+    .student-profile-card .roll {
+      font-size: 0.98rem;
+      color: #555;
+    }
+    .student-profile-card .total-attendance {
+      margin-top: 6px;
+      font-size: 0.97rem;
+      font-weight: 600;
+      color: #1976d2;
+    }
+    .profile-bar-info {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 10px;
+    }
+    .attendance-table-container {
+      overflow-x: auto;
+    }
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .attendance-table th, .attendance-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 1.05rem;
+    }
+    .attendance-table th {
+      background: #f8fafd;
+      color: #1976d2;
+      font-weight: 600;
+    }
+    .attendance-table td.status-present {
+      color: #2e7d32;
+      font-weight: 600;
+    }
+    .attendance-table td.status-absent {
+      color: #c62828;
+      font-weight: 600;
+    }
+    .attendance-table .mark-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.4rem;
+      margin: 0 4px;
+    }
+    .attendance-table .mark-btn.present {
+      color: #2e7d32;
+    }
+    .attendance-table .mark-btn.absent {
+      color: #c62828;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin: 18px 0 0 0;
+    }
+    .pagination button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 18px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .pagination button:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+    }
+    @media (max-width: 900px) {
+      .main-header, .container {
+        padding-left: 8px;
+        padding-right: 8px;
+        width: 100%;
+        max-width: 100vw;
+      }
+      .box {
+        padding: 16px 6px;
+        gap: 12px;
+      }
+      .profile-bar {
+        gap: 12px;
+      }
+      .switch-face-btn {
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 1rem;
+      }
+      .save-btn {
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <button class="switch-face-btn" onclick="window.location.href='facial-attendance.html'">Switch to Face Recognition</button>
+    <span class="header-title">Manual Attendance</span>
+  <button class="save-btn" id="saveDataBtn">Save Data</button>
+  </header>
+  <div class="container">
+    <div class="box top-bar">
+      <div class="bar-item">
+        <label for="class-select">Class</label>
+        <select id="class-select">
+          <option value="6B">Class VI - Section B</option>
+          <option value="8A">Class VIII - Section A</option>
+          <option value="10A">Class X - Section A</option>
+          <option value="11B">Class XI - Section B</option>
+        </select>
+      </div>
+      <div class="bar-item">
+        <label for="date-select">Date</label>
+        <input type="date" id="date-select" value="">
+      </div>
+      <div class="bar-item">
+        <label for="status-select">Status</label>
+        <select id="status-select">
+          <option value="all">All Students</option>
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+        </select>
+      </div>
+      <div class="bar-item search-bar">
+        <label for="search-student">Search Student</label>
+        <input type="text" id="search-student" placeholder="Enter student name...">
+      </div>
+    </div>
+    <div class="box summary-bar">
+      <div>Total Attendance: <span id="total-attendance">0</span></div>
+      <div>Total Present: <span id="total-present">0</span></div>
+      <div>Total Absent: <span id="total-absent">0</span></div>
+    </div>
+    <div class="box profile-bar" style="flex-direction: column; align-items: flex-start;">
+      <div class="profile-bar-info" id="profile-bar-info">Class: VI - Section B | Date: <span id="profile-date"></span></div>
+      <div style="display: flex; gap: 24px; width: 100%;" id="student-profiles">
+        <!-- Student profile cards will be injected here -->
+      </div>
+    </div>
+    <div class="box attendance-table-container" style="flex-direction: column;">
+      <table class="attendance-table" id="attendance-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Roll No</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Time</th>
+            <th>Mark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Student rows will be injected here -->
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+  <script>
+    // Show dialog on Save Data button click
+    document.addEventListener('DOMContentLoaded', function() {
+      var saveBtn = document.getElementById('saveDataBtn');
+      if (saveBtn) {
+        saveBtn.onclick = function() {
+          alert('Data saved successfully!');
+        };
+      }
+    });
+    // Demo data for each class/section
+    const classStudents = {
+      "6B": [
+        { name: "Riya Singh", roll: 1, photo: "known_faces/sai_manaswini.jpg", present: false, total: 18, type: "Face", time: "" },
+  { name: "Riya Singh", roll: 1, photo: "known_faces/amit_singh.jpg", present: false, total: 18, type: "Face", time: "" },
+  { name: "Aman Verma", roll: 2, photo: "known_faces/anjali_patel.jpg", present: false, total: 15, type: "Manual", time: "" },
+  { name: "Priya Patel", roll: 3, photo: "known_faces/dinesh_reddy.jpg", present: false, total: 20, type: "Manual", time: "" },
+  { name: "Rohit Kumar", roll: 4, photo: "known_faces/divya_anvitha.jpg", present: false, total: 17, type: "Face", time: "" },
+  { name: "Suman Das", roll: 5, photo: "known_faces/nitya_vaidehi.jpg", present: false, total: 19, type: "Manual", time: "" },
+  { name: "Neha Singh", roll: 6, photo: "known_faces/priya_verma.jpg", present: false, total: 21, type: "Manual", time: "" },
+  { name: "Vikas Yadav", roll: 7, photo: "known_faces/rohit_kumar.jpg", present: false, total: 16, type: "Face", time: "" },
+  { name: "Anjali Singh", roll: 8, photo: "known_faces/sai_manaswini.jpg", present: false, total: 18, type: "Manual", time: "" },
+  { name: "Deepak Roy", roll: 9, photo: "known_faces/sunil_sharma.jpg", present: false, total: 20, type: "Manual", time: "" },
+  { name: "Kavita Sharma", roll: 10, photo: "known_faces/vinod_kumar.jpg", present: false, total: 22, type: "Face", time: "" },
+  { name: "Extra Student", roll: 11, photo: "known_faces/amit_singh.jpg", present: false, total: 12, type: "Manual", time: "" }
+      ],
+      "8A": [
+        { name: "Sahil Khan", roll: 1, photo: "assets/students/student4.jpg", present: false, total: 19, type: "Face", time: "" },
+  { name: "Sahil Khan", roll: 1, photo: "known_faces/divya_anvitha.jpg", present: false, total: 19, type: "Face", time: "" },
+  { name: "Meena Kumari", roll: 2, photo: "known_faces/nitya_vaidehi.jpg", present: false, total: 17, type: "Manual", time: "" }
+      ],
+      "10A": [
+        { name: "Rahul Sharma", roll: 1, photo: "assets/students/student6.jpg", present: false, total: 21, type: "Face", time: "" },
+  { name: "Rahul Sharma", roll: 1, photo: "known_faces/priya_verma.jpg", present: false, total: 21, type: "Face", time: "" },
+  { name: "Sneha Gupta", roll: 2, photo: "known_faces/rohit_kumar.jpg", present: false, total: 22, type: "Manual", time: "" }
+      ],
+      "11B": [
+        { name: "Vikas Yadav", roll: 1, photo: "assets/students/student8.jpg", present: false, total: 20, type: "Manual", time: "" },
+  { name: "Vikas Yadav", roll: 1, photo: "known_faces/sai_manaswini.jpg", present: false, total: 20, type: "Manual", time: "" },
+  { name: "Anjali Singh", roll: 2, photo: "known_faces/sunil_sharma.jpg", present: false, total: 19, type: "Face", time: "" }
+      ]
+    };
+
+    let currentClass = document.getElementById('class-select').value;
+    let students = JSON.parse(JSON.stringify(classStudents[currentClass]));
+    let today = new Date().toISOString().split('T')[0];
+    document.getElementById('date-select').value = today;
+    document.getElementById('profile-date').innerText = today;
+
+    // Pagination
+    let currentPage = 1;
+    const studentsPerPage = 10;
+
+    function getFilteredStudents() {
+      let filter = document.getElementById('status-select').value;
+      let search = document.getElementById('search-student').value.toLowerCase();
+      return students.filter(stu => {
+        if ((filter === "present" && !stu.present) || (filter === "absent" && stu.present)) return false;
+        if (search && !stu.name.toLowerCase().includes(search)) return false;
+        return true;
+      });
+    }
+
+    function updateSummary() {
+      const total = students.length;
+      const present = students.filter(s => s.present).length;
+      const absent = total - present;
+      document.getElementById('total-attendance').innerText = total;
+      document.getElementById('total-present').innerText = present;
+      document.getElementById('total-absent').innerText = absent;
+    }
+
+    function updateProfileBar() {
+      const classText = document.getElementById('class-select').options[document.getElementById('class-select').selectedIndex].text;
+      const dateText = document.getElementById('date-select').value;
+      document.getElementById('profile-bar-info').innerText = `Class: ${classText} | Date: ${dateText}`;
+      const container = document.getElementById('student-profiles');
+      container.innerHTML = "";
+      // Show only students on current page
+      const filtered = getFilteredStudents();
+      const start = (currentPage - 1) * studentsPerPage;
+      const end = start + studentsPerPage;
+      filtered.slice(start, end).forEach(stu => {
+        const card = document.createElement('div');
+        card.className = "student-profile-card";
+        card.innerHTML = `
+          <img src="${stu.photo}" alt="Photo">
+          <div class="name">${stu.name}</div>
+          <div class="roll">Roll: ${stu.roll}</div>
+          <div class="total-attendance">Total: ${stu.total}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateAttendanceTable() {
+      const tbody = document.getElementById('attendance-table').querySelector('tbody');
+      tbody.innerHTML = "";
+      const filtered = getFilteredStudents();
+      const start = (currentPage - 1) * studentsPerPage;
+      const end = start + studentsPerPage;
+      filtered.slice(start, end).forEach((stu, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${stu.photo}" alt="Photo" style="width:44px;height:44px;border-radius:50%;object-fit:cover;"></td>
+          <td>${stu.name}</td>
+          <td>${stu.roll}</td>
+          <td class="${stu.present ? 'status-present' : 'status-absent'}">${stu.present ? 'Present' : 'Absent'}</td>
+          <td>${stu.type === "Face" ? "Face Recognition" : "Manual"}</td>
+          <td>${stu.time ? stu.time : '-'}</td>
+          <td>
+            <button class="mark-btn present" title="Mark Present" onclick="markAttendance(${students.indexOf(stu)}, true)">✔️</button>
+            <button class="mark-btn absent" title="Mark Absent" onclick="markAttendance(${students.indexOf(stu)}, false)">❌</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      updatePagination(filtered.length);
+    }
+
+    function updatePagination(totalFiltered) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = "";
+      const totalPages = Math.ceil(totalFiltered / studentsPerPage);
+      if (totalPages <= 1) return;
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = "Prev";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => { currentPage--; updateProfileBar(); updateAttendanceTable(); };
+      pagination.appendChild(prevBtn);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.disabled = i === currentPage;
+        btn.onclick = () => { currentPage = i; updateProfileBar(); updateAttendanceTable(); };
+        pagination.appendChild(btn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = "Next";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => { currentPage++; updateProfileBar(); updateAttendanceTable(); };
+      pagination.appendChild(nextBtn);
+    }
+
+    function markAttendance(idx, isPresent) {
+      students[idx].present = isPresent;
+      students[idx].type = "Manual";
+      students[idx].time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      updateAttendanceTable();
+      updateSummary();
+      updateProfileBar();
+    }
+
+    document.getElementById('class-select').addEventListener('change', function() {
+      currentClass = this.value;
+      students = JSON.parse(JSON.stringify(classStudents[currentClass]));
+      currentPage = 1;
+      updateProfileBar();
+      updateAttendanceTable();
+      updateSummary();
+    });
+
+    document.getElementById('date-select').addEventListener('change', function() {
+      document.getElementById('profile-date').innerText = this.value;
+    });
+
+    document.getElementById('status-select').addEventListener('change', function() {
+      currentPage = 1;
+      updateAttendanceTable();
+      updateProfileBar();
+    });
+    document.getElementById('search-student').addEventListener('input', function() {
+      currentPage = 1;
+      updateAttendanceTable();
+      updateProfileBar();
+    });
+
+    // Initial load
+    updateProfileBar();
+    updateAttendanceTable();
+    updateSummary();
+  </script>
+</body>
+</html>

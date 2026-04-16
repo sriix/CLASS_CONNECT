@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Student</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #f4f8fb;
+    }
+    .main-flex {
+      display: flex;
+      gap: 48px;
+      max-width: 1800px; /* Increased max width */
+      margin: 0 auto 40px auto;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 80vh;
+    }
+    form {
+      flex: 1.7; /* Increased flex */
+      min-width: 750px; /* Increased min width */
+      max-width: 1100px;  /* Increased max width */
+    }
+    .form-section {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 44px 90px 38px 90px; /* Increased horizontal padding */
+      margin-bottom: 44px;
+      width: 100%;
+    }
+    .form-section h2 {
+      margin-top: 0;
+      color: #1976d2;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+    .form-group {
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+    .form-group label {
+      min-width: 160px;
+      font-weight: 500;
+      color: #333;
+      font-size: 1.13rem;
+    }
+    .form-group input, .form-group select {
+      flex: 1;
+      padding: 13px 15px;
+      border-radius: 9px;
+      border: 1px solid #bbb;
+      font-size: 1.13rem;
+      background: #f8fafd;
+    }
+    .submit-btn {
+      display: block;
+      margin: 24px auto 0 auto;
+      padding: 16px 48px;
+      font-size: 1.18rem;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .submit-btn:hover {
+      background: #125ea8;
+    }
+    .photo-section {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 44px 50px 38px 50px;
+      max-width: 600px; /* Increased max width */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 600px; /* Increased min height */
+      position: relative;
+    }
+    .photo-section h3 {
+      color: #1976d2;
+      font-size: 1.22rem;
+      font-weight: 600;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    #video, #captured-photo {
+      width: 370px; /* Increased width */
+      height: 300px; /* Increased height */
+      border-radius: 16px;
+      background: #e3e3e3;
+      margin-bottom: 18px;
+      object-fit: cover;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+      border: 2px solid #e0e0e0;
+      display: block;
+    }
+    .photo-btns {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .photo-btns button, .photo-btns label {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 12px 28px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+      text-align: center;
+    }
+    .photo-btns button:hover, .photo-btns label:hover {
+      background: #125ea8;
+    }
+    .guidelines {
+      font-size: 1.08rem;
+      color: #444;
+      background: #f8fafd;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 18px;
+      line-height: 1.7;
+      width: 100%;
+    }
+    .success-message {
+      display: flex;
+      align-items: center;
+      color: #2e7d32;
+      font-weight: 600;
+      font-size: 1.13rem;
+      margin-top: 14px;
+      margin-bottom: 10px;
+      gap: 10px;
+      justify-content: center;
+      animation: fadeIn 0.7s;
+    }
+    .success-message svg {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    @media (max-width: 1200px) {
+      .main-flex {
+        flex-direction: column;
+        gap: 0;
+        align-items: stretch;
+      }
+      .photo-section {
+        margin: 0 auto 24px auto;
+      }
+      form {
+        max-width: 100%;
+        min-width: 0;
+      }
+    }
+    @media (max-width: 900px) {
+      .form-section, .photo-section {
+        padding: 16px 6px;
+      }
+      .main-flex {
+        padding: 0 4px;
+      }
+      .form-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+      #video, #captured-photo {
+        width: 98vw;
+        max-width: 98vw;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header" style="margin-bottom: 32px;">
+    <div class="nav-left">
+      <a href="index.html" class="logo">
+        <img src="logo.jpeg" alt="ClassConnect Logo" style="height:64px; width:auto; display:block;">
+      </a>
+      <nav class="main-nav">
+        <a href="loggedin.html" class="nav-link">Dashboard</a>
+        <a href="reports.html" class="nav-link admin-only">Reports</a>
+        <a href="add-student.html" class="nav-link admin-only active">Add Students</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <a href="#" class="active">English</a> | <a href="#">हिन्दी</a>
+      </div>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-name" id="userDropdownBtn">User ▼</div>
+        <div class="dropdown-content" id="userDropdownContent">
+          <a href="profile.html">My Profile</a>
+          <a href="#" class="logout-btn" onclick="localStorage.clear();sessionStorage.clear();window.location.href='index.html';return false;">Logout</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Dropdown open/close logic
+      let dropdownOpen = false;
+      const btn = document.getElementById('userDropdownBtn');
+      const content = document.getElementById('userDropdownContent');
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        if (!dropdownOpen) {
+          content.style.display = 'block';
+          dropdownOpen = true;
+        } else {
+          content.style.display = 'none';
+          dropdownOpen = false;
+        }
+      };
+      // Prevent closing when clicking inside dropdown
+      content.onclick = function(e) {
+        e.stopPropagation();
+      };
+      // Close dropdown if clicking outside
+      document.body.addEventListener('click', function() {
+        if (dropdownOpen) {
+          content.style.display = 'none';
+          dropdownOpen = false;
+        }
+      });
+    </script>
+  </header>
+
+  <div class="main-flex">
+    <form style="flex:1.7;">
+      <!-- Personal Information -->
+      <section class="form-section">
+        <h2>Personal Information</h2>
+        <div class="form-group">
+          <label for="student-name">Name</label>
+          <input type="text" id="student-name" name="student-name" required>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" name="dob" required>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender" required>
+            <option value="">Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address" required>
+        </div>
+      </section>
+
+      <!-- Academic Details -->
+      <section class="form-section">
+        <h2>Academic Details</h2>
+        <div class="form-group">
+          <label for="roll-number">Roll Number</label>
+          <input type="text" id="roll-number" name="roll-number" required>
+        </div>
+        <div class="form-group">
+          <label for="class">Class</label>
+          <select id="class" name="class" required>
+            <option value="">Select</option>
+            <option>VI</option>
+            <option>VIII</option>
+            <option>X</option>
+            <option>XI</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="section">Section</label>
+          <select id="section" name="section" required>
+            <option value="">Select</option>
+            <option>A</option>
+            <option>B</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="admission-date">Admission Date</label>
+          <input type="date" id="admission-date" name="admission-date" required>
+        </div>
+        <div class="form-group">
+          <label for="admission-year">Admission Year</label>
+          <input type="number" id="admission-year" name="admission-year" min="2000" max="2099" required>
+        </div>
+      </section>
+
+      <!-- Contact Information -->
+      <section class="form-section">
+        <h2>Contact Information</h2>
+        <div class="form-group">
+          <label for="guardian-name">Guardian Name</label>
+          <input type="text" id="guardian-name" name="guardian-name" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email">
+        </div>
+      </section>
+
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+
+    <section class="photo-section">
+      <h3>Student Photo</h3>
+      <video id="video" autoplay playsinline style="display:none;"></video>
+      <img id="captured-photo" src="" alt="Student Photo" style="display:none;">
+      <div id="success-message" class="success-message" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="12" fill="#e8f5e9"/>
+          <path d="M7 13.5L11 17L17 9.5" stroke="#2e7d32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Photo captured successfully!
+      </div>
+      <div class="photo-btns">
+        <button type="button" id="start-camera">Start Camera</button>
+        <button type="button" id="capture-photo" style="display:none;">Capture</button>
+        <label for="upload-photo" style="margin-bottom:0;cursor:pointer;">Upload
+          <input type="file" id="upload-photo" accept="image/*" style="display:none;">
+        </label>
+      </div>
+      <div class="guidelines">
+        <strong>Guidelines for Photo:</strong>
+        <ul style="padding-left:18px;margin:8px 0 0 0;">
+          <li>Face should be clearly visible and centered.</li>
+          <li>Remove any mask, cap, or sunglasses.</li>
+          <li>Use a plain background if possible.</li>
+          <li>Good lighting is recommended.</li>
+          <li>Only one face should be visible in the photo.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  <script>
+    // Camera and photo upload logic
+    const video = document.getElementById('video');
+    const capturedPhoto = document.getElementById('captured-photo');
+    const startCameraBtn = document.getElementById('start-camera');
+    const capturePhotoBtn = document.getElementById('capture-photo');
+    const uploadPhotoInput = document.getElementById('upload-photo');
+    const successMessage = document.getElementById('success-message');
+
+    let stream;
+
+    startCameraBtn.onclick = async function() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        video.style.display = 'block';
+        capturedPhoto.style.display = 'none';
+        capturePhotoBtn.style.display = 'inline-block';
+        successMessage.style.display = 'none';
+      }
+    };
+
+    capturePhotoBtn.onclick = function() {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      capturedPhoto.src = canvas.toDataURL('image/png');
+      capturedPhoto.style.display = 'block';
+      video.style.display = 'none';
+      capturePhotoBtn.style.display = 'none';
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      // Show success message
+      successMessage.style.display = 'flex';
+    };
+
+    uploadPhotoInput.onchange = function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          capturedPhoto.src = evt.target.result;
+          capturedPhoto.style.display = 'block';
+          video.style.display = 'none';
+          capturePhotoBtn.style.display = 'none';
+          if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+          }
+          // Show success message
+          successMessage.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  </script>
+</body>
+</html>

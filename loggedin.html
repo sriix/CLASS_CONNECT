@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Dashboard</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .user-dropdown:hover .dropdown-content {
+  display: block;
+}
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="nav-left">
+      <a href="index.html" class="logo">
+        <img src="images/logo.jpeg" alt="ClassConnect Logo" style="height:64px; width:auto; display:block;">
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link active">Dashboard</a>
+        <a href="reports.html" class="nav-link admin-only">Reports</a>
+        <a href="add-student.html" class="nav-link">Add Student</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <a href="loggedin_h.html" class="active">English</a> | <a href="loggedin_h.html">हिन्दी</a>
+      </div>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-name" id="userDropdownBtn">User▼</div>
+        <div class="dropdown-content" id="userDropdownContent">
+          <a href="profile.html">My Profile</a>
+          <a href="#" class="logout-btn" onclick="localStorage.clear();sessionStorage.clear();window.location.href='index.html';return false;">Logout</a>
+        </div>
+      </div>
+      <script>
+        // Dropdown open/close logic
+        let dropdownOpen = false;
+        let dropdownTimeout;
+        const btn = document.getElementById('userDropdownBtn');
+        const content = document.getElementById('userDropdownContent');
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          if (!dropdownOpen) {
+            content.style.display = 'block';
+            dropdownOpen = true;
+            // Set timer to auto-close after 1 minute
+            dropdownTimeout = setTimeout(() => {
+              content.style.display = 'none';
+              dropdownOpen = false;
+            }, 60000);
+          } else {
+            content.style.display = 'none';
+            dropdownOpen = false;
+            clearTimeout(dropdownTimeout);
+          }
+        };
+        // Prevent closing when clicking inside dropdown
+        content.onclick = function(e) {
+          e.stopPropagation();
+        };
+        // Close dropdown if clicking outside
+        document.body.addEventListener('click', function() {
+          if (dropdownOpen) {
+            content.style.display = 'none';
+            dropdownOpen = false;
+            clearTimeout(dropdownTimeout);
+          }
+        });
+      </script>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <div class="dashboard-header">
+        <h2>Welcome, User.</h2>
+        <div class="today-date">Wednesday, 23 September 2025</div>
+    </div>
+    <section class="class-list">
+      <div class="class-card">
+        <div class="class-info">
+            <div class="class-title">Class VI - Section B</div>
+            <div class="student-count">Total Students: 45</div>
+        </div>
+        <button class="mark-attendance-btn" onclick="window.location.href='facial-attendance.html?class=6B'">✔️ Mark Attendance</button>
+      </div>
+      <div class="class-card">
+        <div class="class-info">
+            <div class="class-title">Class VIII - Section A</div>
+            <div class="student-count">Total Students: 38</div>
+        </div>
+        <button class="mark-attendance-btn" onclick="window.location.href='facial-attendance.html?class=8A'">✔️ Mark Attendance</button>
+      </div>
+      <div class="class-card">
+        <div class="class-info">
+            <div class="class-title">Class X - Section A</div>
+            <div class="student-count">Total Students: 40</div>
+        </div>
+        <button class="mark-attendance-btn" onclick="window.location.href='facial-attendance.html?class=10A'">✔️ Mark Attendance</button>
+      </div>
+      <div class="class-card">
+        <div class="class-info">
+            <div class="class-title">Class XI - Section B</div>
+            <div class="student-count">Total Students: 35</div>
+        </div>
+        <button class="mark-attendance-btn" onclick="window.location.href='facial-attendance.html?class=11B'">✔️ Mark Attendance</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

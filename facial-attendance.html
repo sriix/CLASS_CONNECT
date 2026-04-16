@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Facial Recognition Attendance</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #f4f8fb;
+    }
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px 40px 10px 40px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 0;
+      position: relative;
+      flex-direction: column;
+    }
+    .header-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #222;
+      letter-spacing: 1px;
+      margin: 0;
+      text-align: center;
+    }
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-top: 14px;
+      margin-bottom: 0;
+    }
+    .header-status span {
+      font-size: 1.08rem;
+      color: #1976d2;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header-status .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #43a047;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .switch-manual {
+      background: #fff;
+      color: #1976d2;
+      border: 2px solid #1976d2;
+      border-radius: 7px;
+      padding: 7px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 18px;
+      margin-bottom: 0;
+      transition: background 0.2s, color 0.2s;
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .switch-manual:hover {
+      background: #1976d2;
+      color: #fff;
+    }
+    .class-selector-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 auto 24px auto;
+      max-width: 600px;
+      background: #f8fafd;
+      padding: 14px 32px;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .class-selector-section label {
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .class-selector-section select {
+      font-size: 1rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      background: #fff;
+    }
+    .attendance-flex {
+      display: flex;
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto 32px auto;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .scanner-section {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      padding: 32px 36px 28px 36px;
+      min-width: 520px;
+      max-width: 700px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .scanner-section h3 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: #1976d2;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    #video {
+      width: 540px;
+      height: 340px;
+      border-radius: 12px;
+      background: #e3e3e3;
+      margin-bottom: 18px;
+      object-fit: cover;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+      border: 2px solid #e0e0e0;
+      display: block;
+    }
+    #scan-btn {
+      margin-top: 10px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    #scan-btn:hover {
+      background: #125ea8;
+    }
+    #scan-result {
+      margin-top: 18px;
+      font-size: 1.1rem;
+      color: #388e3c;
+      font-weight: 500;
+      min-height: 24px;
+    }
+    .student-detail-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      padding: 32px 36px 28px 36px;
+      min-width: 420px;
+      max-width: 520px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .student-photo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #1976d2;
+      margin-bottom: 18px;
+      background: #f0f0f0;
+    }
+    .student-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #222;
+      text-align: center;
+    }
+    .student-info {
+      font-size: 1.07rem;
+      color: #444;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .attendance-status {
+      margin-top: 12px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      padding: 7px 18px;
+      border-radius: 7px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      display: inline-block;
+    }
+    .attendance-status.absent {
+      background: #ffebee;
+      color: #c62828;
+    }
+    .student-list-summary {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      padding: 24px 32px 24px 32px;
+      margin: 0 auto 32px auto;
+      max-width: 1200px;
+    }
+    .student-list-summary h4 {
+      margin-top: 0;
+      color: #1976d2;
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .horizontal-student-list {
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+    }
+    .student-card {
+      background: #f8fafd;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 160px;
+      max-width: 180px;
+    }
+    .student-card img {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .student-card .name {
+      font-weight: 700;
+      font-size: 1.07rem;
+      margin-bottom: 2px;
+    }
+    .student-card .roll {
+      font-size: 0.98rem;
+      color: #555;
+    }
+    .student-card .status {
+      margin-top: 6px;
+      font-size: 0.97rem;
+      font-weight: 600;
+    }
+    .student-card.present {
+      border: 2px solid #4caf50;
+    }
+    .student-card.absent {
+      border: 2px solid #e0e0e0;
+    }
+    .attendance-summary-container {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      max-width: 500px;
+      margin: 0 auto 32px auto;
+      padding: 24px 32px;
+    }
+    .attendance-summary {
+      text-align: center;
+    }
+    .attendance-summary div {
+      margin: 8px 0;
+      font-size: 1.1rem;
+    }
+    @media (max-width: 1100px) {
+      .attendance-flex {
+        flex-direction: column;
+        gap: 0;
+        align-items: stretch;
+      }
+      .scanner-section, .student-detail-container {
+        margin: 0 auto 24px auto;
+        max-width: 98vw;
+        min-width: 0;
+      }
+    }
+    @media (max-width: 900px) {
+      .main-header {
+        padding: 18px 10px 10px 10px;
+      }
+      .switch-manual {
+        right: 10px;
+      }
+      #video {
+        width: 98vw;
+        max-width: 98vw;
+        height: 180px;
+      }
+      .student-photo {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+      <button class="back-btn" onclick="window.location.href='loggedin.html'" aria-label="Back" style="position:absolute;left:40px;top:50%;transform:translateY(-50%);background:#fff;border:2px solid #1976d2;color:#1976d2;border-radius:7px;padding:7px 20px;font-size:1rem;font-weight:600;cursor:pointer;transition:background 0.2s, color 0.2s;margin-right:24px;z-index:2;">
+        &#8592; Back
+      </button>
+      <span class="header-title">Facial Recognition Attendance</span>
+    <div class="header-status">
+      <span><span class="dot"></span>AI Detection</span>
+      <span><span class="dot"></span>Today's Progress</span>
+      <span><span class="dot"></span>Camera Active</span>
+    </div>
+    <button class="switch-manual" onclick="window.location.href='manual.html'">Switch to Manual</button>
+  </header>
+  <section class="class-selector-section">
+    <label for="class-select">Select Class & Section:</label>
+    <select id="class-select">
+      <option value="6B">Class VI - Section B</option>
+      <option value="8A">Class VIII - Section A</option>
+      <option value="10A">Class X - Section A</option>
+      <option value="11B">Class XI - Section B</option>
+    </select>
+  </section>
+  <div class="attendance-flex                                               ">
+    <!-- Left: Camera -->
+    <section class="scanner-section">
+      <h3>Scan Student Face</h3>
+  <video id="video" style="width:100%;max-width:540px;height:auto;aspect-ratio:16/10;display:block;border-radius:12px;object-fit:cover;" autoplay></video>
+      <br>
+      <button id="scan-btn">Scan & Mark Attendance</button>
+      <div id="scan-result"></div>
+    </section>
+  </div>
+  <section class="student-list-summary" style="padding-bottom:0;">
+    <div class="student-profile-list-container" style="background:#fff; border-radius:14px; box-shadow:0 1px 8px rgba(0,0,0,0.04); padding:24px 32px; min-width:320px; max-width:900px; margin: 0 auto;">
+      <div style="font-weight:600; color:#1976d2; font-size:1.1rem; margin-bottom:12px;">Class Attendance List</div>
+      <div class="horizontal-student-list" id="horizontal-student-list" style="
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+        padding-bottom: 16px;
+        grid-auto-rows: 1fr;
+        max-width: 100%;
+      ">
+        <!-- Student cards will be populated by JS -->
+      </div>
+    </div>
+  </section>
+  <script>
+    let faceProfiles = [];
+async function loadKnownFaces() {
+  const res = await fetch('known_faces.json');
+  const faces = await res.json();
+  faceProfiles = faces.map((face, idx) => ({
+    ...face,
+    roll: face.roll || (idx + 1),
+    present: false
+  }));
+  renderFaceProfiles();
+}
+
+function renderFaceProfiles() {
+  const list = document.getElementById('horizontal-student-list');
+  list.innerHTML = '';
+  faceProfiles.forEach((face, idx) => {
+    const card = document.createElement('div');
+    card.style.display = 'flex';
+    card.style.flexDirection = 'column';
+    card.style.alignItems = 'center';
+    card.style.background = '#f8fafd';
+    card.style.borderRadius = '10px';
+    card.style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)';
+    card.style.padding = '16px 18px 10px 18px';
+    card.style.minWidth = '120px';
+    card.style.maxWidth = '140px';
+    card.style.margin = '0 4px';
+    const img = document.createElement('img');
+    img.src = face.image;
+    img.alt = face.name;
+    img.style.width = '70px';
+    img.style.height = '70px';
+    img.style.objectFit = 'cover';
+    img.style.borderRadius = '50%';
+    img.style.marginBottom = '10px';
+    const name = document.createElement('div');
+    name.textContent = face.name;
+    name.style.fontWeight = '600';
+    name.style.fontSize = '1rem';
+    name.style.textAlign = 'center';
+    // Roll number
+    const roll = document.createElement('div');
+    roll.textContent = 'Roll No: ' + face.roll;
+    roll.style.fontSize = '0.95rem';
+    roll.style.color = '#555';
+    // Present/Absent status
+    const status = document.createElement('div');
+    status.textContent = face.present ? 'Present' : 'Absent';
+    status.className = 'student-status' + (face.present ? ' present' : ' absent');
+    status.style.fontSize = '0.95rem';
+    status.style.fontWeight = '600';
+    card.appendChild(img);
+    card.appendChild(name);
+    card.appendChild(roll);
+    card.appendChild(status);
+    list.appendChild(card);
+  });
+}
+loadKnownFaces();
+
+document.getElementById('scan-btn').onclick = function() {
+  // Find first absent student in faceProfiles
+  const nextAbsent = faceProfiles.findIndex(s => !s.present);
+  if (nextAbsent !== -1) {
+    faceProfiles[nextAbsent].present = true;
+    renderFaceProfiles();
+    document.getElementById('scan-result').innerText =
+      "Student recognized: " + faceProfiles[nextAbsent].name + ". Attendance marked!";
+  } else {
+    document.getElementById('scan-result').innerText =
+      "All students already marked present.";
+  }
+};
+    // Demo data for each class/section
+    const classStudents = {
+      "6B": [
+        { name: "Riya Singh", roll: 1, photo: "assets/students/student1.jpg", present: false },
+        { name: "Aman Verma", roll: 2, photo: "assets/students/student2.jpg", present: false },
+        { name: "Priya Patel", roll: 3, photo: "assets/students/student3.jpg", present: false }
+      ],
+      "8A": [
+        { name: "Sahil Khan", roll: 1, photo: "assets/students/student4.jpg", present: false },
+        { name: "Meena Kumari", roll: 2, photo: "assets/students/student5.jpg", present: false }
+      ],
+      "10A": [
+        { name: "Rahul Sharma", roll: 1, photo: "assets/students/student6.jpg", present: false },
+        { name: "Sneha Gupta", roll: 2, photo: "assets/students/student7.jpg", present: false }
+      ],
+      "11B": [
+        { name: "Vikas Yadav", roll: 1, photo: "assets/students/student8.jpg", present: false },
+        { name: "Anjali Singh", roll: 2, photo: "assets/students/student9.jpg", present: false }
+      ]
+    };
+
+    let currentClass = document.getElementById('class-select').value;
+    let students = JSON.parse(JSON.stringify(classStudents[currentClass]));
+    let currentStudentIndex = 0;
+
+    // Webcam preview (for demo, not real facial recognition)
+    const video = document.getElementById('video');
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        video.srcObject = stream;
+        video.play();
+      });
+    }
+
+    // Chart.js attendance graph
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    let attendanceChart;
+
+    function updateStudentDetail(index) {
+      const student = students[index];
+      document.getElementById('student-photo').src = student.photo;
+      document.getElementById('student-name').innerText = student.name;
+      document.getElementById('student-roll').innerText = "Roll No: " + student.roll;
+      document.getElementById('student-class').innerText = "Class: " + document.getElementById('class-select').options[document.getElementById('class-select').selectedIndex].text;
+      const statusDiv = document.getElementById('student-status');
+      statusDiv.innerText = student.present ? "Present" : "Absent";
+      statusDiv.className = "attendance-status" + (student.present ? "" : " absent");
+    }
+
+    function updateStudentTable() {
+      const container = document.getElementById('horizontal-student-list');
+      container.innerHTML = "";
+      students.forEach(stu => {
+        const card = document.createElement('div');
+        card.className = `student-card ${stu.present ? 'present' : 'absent'}`;
+        card.style.background = "#f8fafd";
+        card.style.borderRadius = "12px";
+        card.style.boxShadow = "0 1px 4px rgba(0,0,0,0.05)";
+        card.style.padding = "18px 22px";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.alignItems = "center";
+        card.style.minWidth = "160px";
+        card.style.maxWidth = "180px";
+        card.style.border = stu.present ? "2px solid #4caf50" : "2px solid #e0e0e0";
+        card.innerHTML = `
+          <img src="${stu.photo}" alt="Photo" style="width:54px;height:54px;border-radius:50%;object-fit:cover;margin-bottom:10px;">
+          <div style="font-weight:700;font-size:1.07rem;margin-bottom:2px;">${stu.name}</div>
+          <div style="font-size:0.98rem;color:#555;">Roll: ${stu.roll}</div>
+          <div style="margin-top:6px;font-size:0.97rem;font-weight:600;${stu.present ? 'color:#2e7d32;' : 'color:#c62828;'}">
+            ${stu.present ? 'Present' : 'Absent'}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateAttendanceSummary() {
+      const present = students.filter(s => s.present).length;
+      const absent = students.length - present;
+      document.getElementById('present-count').innerText = present;
+      document.getElementById('absent-count').innerText = absent;
+      if (!attendanceChart) {
+        attendanceChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['Present', 'Absent'],
+            datasets: [{
+              data: [present, absent],
+              backgroundColor: ['#4caf50', '#f44336']
+            }]
+          }
+        });
+      } else {
+        attendanceChart.data.datasets[0].data = [present, absent];
+        attendanceChart.update();
+      }
+    }
+
+    // Handle class/section change
+    document.getElementById('class-select').addEventListener('change', function() {
+      currentClass = this.value;
+      students = JSON.parse(JSON.stringify(classStudents[currentClass]));
+      currentStudentIndex = 0;
+      updateStudentDetail(currentStudentIndex);
+      updateStudentTable();
+      updateAttendanceSummary();
+      document.getElementById('scan-result').innerText = "";
+    });
+
+    // Dummy scan logic (simulate marking one student present per scan)
+    document.getElementById('scan-btn').onclick = function() {
+      // Find first absent student
+      const nextAbsent = students.findIndex(s => !s.present);
+      if (nextAbsent !== -1) {
+        students[nextAbsent].present = true;
+        currentStudentIndex = nextAbsent;
+        updateStudentDetail(currentStudentIndex);
+        updateStudentTable();
+        updateAttendanceSummary();
+        document.getElementById('scan-result').innerText =
+          "Student recognized: " + students[nextAbsent].name + ". Attendance marked!";
+      } else {
+        document.getElementById('scan-result').innerText =
+          "All students already marked present for this class.";
+      }
+    };
+
+    // Initialize on load
+    updateStudentDetail(currentStudentIndex);
+    updateStudentTable();
+    updateAttendanceSummary();
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Sunil Sharma",
+    "image": "known_faces/sunil_sharma.jpg"
+  },
+  {
+    "name": "Priya Verma",
+    "image": "known_faces/priya_verma.jpg"
+  },
+  {
+    "name": "Amit Singh",
+    "image": "known_faces/amit_singh.jpg"
+  },
+  {
+    "name": "Rohit Kumar",
+    "image": "known_faces/rohit_kumar.jpg"
+  },
+  {
+    "name": "Anjali Patel",
+    "image": "known_faces/anjali_patel.jpg"
+  },
+  {
+    "name": "Vinod Kumar",
+    "image": "known_faces/vinod_kumar.jpg"
+  },
+  {
+    "name": "Dinesh Reddy",
+    "image": "known_faces/dinesh_reddy.jpg"
+  },
+  {
+    "name": "Sai Manaswini",
+    "image": "known_faces/sai_manaswini.jpg"
+  },
+  {
+    "name": "Diya Anvitha",
+    "image": "known_faces/divya_anvitha.jpg"
+  },
+  {
+    "name": "Nitya Vaidehi",
+    "image": "known_faces/nitya_vaidehi.jpg"
+  }
+
+  ,
+  { "name": "Neha Joshi", "image": "known_faces/rohit_kumar.jpg" },
+  { "name": "Vikas Yadav", "image": "known_faces/anjali_patel.jpg" },
+  { "name": "Suman Gupta", "image": "known_faces/vinod_kumar.jpg" },
+  { "name": "Deepak Mehra", "image": "known_faces/dinesh_reddy.jpg" },
+  { "name": "Kavita Saini", "image": "known_faces/sai_manaswini.jpg" },
+  { "name": "Manoj Rawat", "image": "known_faces/amit_singh.jpg" },
+  { "name": "Sneha Reddy", "image": "known_faces/divya_anvitha.jpg" },
+  { "name": "Arjun Deshmukh", "image": "known_faces/priya_verma.jpg" },
+  { "name": "Pooja Nair", "image": "known_faces/nitya_vaidehi.jpg" },
+  { "name": "Rahul Tripathi", "image": "known_faces/sunil_sharma.jpg" }
+]

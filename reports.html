@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Report</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f7f9fb; }
+    .report-header { 
+      font-size: 2rem; 
+      font-weight: 700; 
+      margin: 32px 0 18px 0; 
+      text-align: left; 
+      display: flex; 
+      align-items: center;
+      gap: 10px;
+    }
+    .report-header .emoji {
+      font-size: 2.2rem;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .report-filter-container {
+      background: linear-gradient(135deg, #e3f0ff 0%, #f5faff 100%);
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(25, 118, 210, 0.08);
+      padding: 32px 38px; 
+      max-width: 500px;
+      min-width: 340px;
+      display: flex; flex-direction: column; gap: 18px;
+      margin-bottom: 32px;
+      border-left: 8px solid #1976d2;
+      transition: box-shadow 0.2s;
+    }
+    .report-filter-container label { font-weight: 500; margin-bottom: 6px; color: #1976d2; }
+    .report-filter-container select, .report-filter-container input, .report-filter-container button {
+      margin-bottom: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid #b6d0f7; font-size: 1rem;
+      background: #fafdff;
+      transition: border 0.2s;
+    }
+    .report-filter-container select:focus, .report-filter-container input:focus {
+      border: 1.5px solid #1976d2;
+      outline: none;
+    }
+    .report-filter-container button {
+      background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+      color: #fff; font-weight: 600; border: none; cursor: pointer; margin-top: 10px;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+      letter-spacing: 0.5px;
+    }
+    .report-filter-container button:hover { background: linear-gradient(90deg, #125ea7 60%, #1976d2 100%); }
+    .summary-cards-row {
+      display: flex; gap: 24px; margin-bottom: 32px; margin-top: 10px;
+      justify-content: flex-start; flex-wrap: wrap;
+    }
+    .summary-card {
+      background: linear-gradient(120deg, #e3f0ff 60%, #f5faff 100%);
+      border-radius: 14px; 
+      box-shadow: 0 1px 8px rgba(25, 118, 210, 0.07);
+      padding: 22px 28px; min-width: 170px; flex: 1 1 170px; display: flex; flex-direction: column; align-items: flex-start;
+      border-left: 6px solid #42a5f5;
+    }
+    .summary-card .card-title { font-size: 1.05rem; color: #1976d2; margin-bottom: 8px; font-weight: 600;}
+    .summary-card .card-value { font-size: 2rem; font-weight: 700; color: #1976d2; }
+    .charts-row {
+      display: flex; gap: 32px; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .chart-container {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      padding: 24px 20px;
+      flex: 1 1 380px;      /* Medium base width */
+      min-width: 320px;
+      max-width: 420px;     /* Medium max width */
+      height: 340px;        /* Medium height */
+      box-sizing: border-box;
+    }
+    .chart-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; color: #1976d2;}
+    .attendance-table-container {
+      background: #fff; border-radius: 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+      padding: 24px 20px; margin-bottom: 40px; margin-top: 20px;
+    }
+    .attendance-table-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: #1976d2;}
+    table.attendance-table {
+      width: 100%; border-collapse: collapse; font-size: 1rem;
+    }
+    table.attendance-table th, table.attendance-table td {
+      padding: 10px 8px; border-bottom: 1px solid #e0e0e0; text-align: left;
+    }
+    table.attendance-table th { background: #e3f0ff; font-weight: 600; color: #1976d2;}
+    .trend-chart-container {
+      padding-top: 36px;
+      padding-bottom: 32px;
+    }
+    @media (max-width: 1100px) {
+      .charts-row { flex-direction: column; gap: 18px; }
+      .summary-cards-row { flex-direction: column; gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="nav-left">
+      <a href="index.html" class="logo">
+        <img src="logo.jpeg" alt="ClassConnect Logo" style="height:64px; width:auto; display:block;">
+      </a>
+      <nav class="main-nav">
+        <a href="loggedin.html" class="nav-link">Dashboard</a>
+        <a href="reports.html" class="nav-link admin-only active">Reports</a>
+        <a href="add-student.html" class="nav-link admin-only">Add Students</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <a href="#" class="active">English</a> | <a href="#">हिन्दी</a>
+      </div>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-name" id="userDropdownBtn">User ▼</div>
+        <div class="dropdown-content" id="userDropdownContent">
+          <a href="profile.html">My Profile</a>
+          <a href="#" class="logout-btn" onclick="localStorage.clear();sessionStorage.clear();window.location.href='index.html';return false;">Logout</a>
+        </div>
+      </div>
+      <script>
+        // Dropdown open/close logic
+        let dropdownOpen = false;
+        let dropdownTimeout;
+        const btn = document.getElementById('userDropdownBtn');
+        const content = document.getElementById('userDropdownContent');
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          if (!dropdownOpen) {
+            content.style.display = 'block';
+            dropdownOpen = true;
+          } else {
+            content.style.display = 'none';
+            dropdownOpen = false;
+          }
+        };
+        // Prevent closing when clicking inside dropdown
+        content.onclick = function(e) {
+          e.stopPropagation();
+        };
+        // Close dropdown if clicking outside
+        document.body.addEventListener('click', function() {
+          if (dropdownOpen) {
+            content.style.display = 'none';
+            dropdownOpen = false;
+          }
+        });
+      </script>
+    </div>
+  </header>
+
+  <main style="display: flex; gap: 36px; align-items: flex-start; max-width: 1400px; margin: 0 auto; padding: 32px 0;">
+    <!-- Left: Filter/Report Generation -->
+    <div>
+      <div class="report-header">Attendance Report</div>
+      <div class="report-filter-container">
+        <label for="class-select">Select Class</label>
+        <select id="class-select">
+          <option value="all">All Classes</option>
+          <option value="VI-B">Class VI-B</option>
+          <option value="VIII-A">Class VIII-A</option>
+          <option value="X-A">Class X-A</option>
+          <option value="XI-B">Class XI-B</option>
+        </select>
+        <label for="date-select">Select Date</label>
+        <input type="date" id="date-select" />
+        <label for="report-type">Report Type</label>
+        <select id="report-type">
+          <option value="summary">Summary Report</option>
+          <option value="detailed">Detailed Report</option>
+        </select>
+        <button id="generate-report-btn">Generate Report</button>
+      </div>
+    </div>
+
+    <!-- Right: Main Content -->
+    <div style="flex:1; min-width: 0;">
+      <!-- Summary Cards Row -->
+      <div class="summary-cards-row">
+        <div class="summary-card">
+          <div class="card-title">Students &lt; 75%</div>
+          <div class="card-value" id="below-75-count">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-title">Total Students</div>
+          <div class="card-value" id="total-students-count">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-title">Present Today</div>
+          <div class="card-value" id="present-today-count">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-title">Absent Today</div>
+          <div class="card-value" id="absent-today-count">0</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-row">
+        <div class="chart-container trend-chart-container">
+          <div class="chart-title">Attendance Trend</div>
+          <canvas id="trendChart" height="260" style="margin-top:16px;margin-bottom:10px;"></canvas>
+        </div>
+        <div class="chart-container">
+          <div class="chart-title">Class-wise Comparison</div>
+          <canvas id="classComparisonChart" height="260"></canvas>
+        </div>
+      </div>
+
+      <!-- Student Attendance Table -->
+      <div class="attendance-table-container">
+        <div class="attendance-table-title">Student Attendance Details</div>
+        <table class="attendance-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll No.</th>
+              <th>Total Days</th>
+              <th>Present</th>
+              <th>Absent</th>
+              <th>Attendance %</th>
+            </tr>
+          </thead>
+          <tbody id="student-attendance-table-body">
+            <!-- Rows will be populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="reports.js"></script>
+</body>
+</html>

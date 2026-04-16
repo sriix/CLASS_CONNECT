@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Attendance System</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body.auth-bg {
+      /* Add your background image below */
+      /* Example: background: url('Naruto.jpg') no-repeat center center fixed; */
+      background: url('images/Login.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="auth-bg">
+  <div class="auth-container" style="min-height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div class="auth-card" style="background:#fff;padding:2.5rem 2rem 2rem 2rem;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.13);width:100%;max-width:380px;">
+      <h2 style="text-align:center;margin-bottom:1.5rem;font-weight:600;">Sign Up</h2>
+      <form id="loginForm" autocomplete="off" novalidate>
+        <label for="username" style="font-weight:500;">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="off" style="width:100%;padding:0.7rem;margin-bottom:0.2rem;border-radius:8px;border:1px solid #ccc;font-size:1rem;" />
+        <small id="usernameHelp" style="color:#c00;display:none;margin-bottom:0.8rem;"></small>
+
+        <label for="email" style="font-weight:500;">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="off" inputmode="email" style="width:100%;padding:0.7rem;margin-bottom:0.2rem;border-radius:8px;border:1px solid #ccc;font-size:1rem;" />
+        <small id="emailHelp" style="color:#c00;display:none;margin-bottom:0.8rem;"></small>
+
+        <label for="phone" style="font-weight:500;">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" style="width:100%;padding:0.7rem;margin-bottom:0.2rem;border-radius:8px;border:1px solid #ccc;font-size:1rem;" />
+        <small id="phoneHelp" style="color:#c00;display:none;margin-bottom:0.8rem;"></small>
+
+        <label for="password" style="font-weight:500;">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="off" style="width:100%;padding:0.7rem;margin-bottom:0.2rem;border-radius:8px;border:1px solid #ccc;font-size:1rem;" />
+        <small id="passwordHelp" style="color:#c00;display:none;margin-bottom:0.8rem;"></small>
+
+        <label for="confirmPassword" style="font-weight:500;">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="off" style="width:100%;padding:0.7rem;margin-bottom:0.2rem;border-radius:8px;border:1px solid #ccc;font-size:1rem;" />
+        <small id="confirmPasswordHelp" style="color:#c00;display:none;margin-bottom:0.8rem;"></small>
+
+        <button type="submit" class="login-btn" style="width:100%;padding:0.8rem;background:#007bff;color:#fff;border:none;border-radius:8px;font-size:1.1rem;font-weight:600;margin-top:0.5rem;cursor:pointer;">Sign Up</button>
+      </form>
+      <div class="auth-links" style="text-align:center;margin-top:1rem;">
+        <a href="forgot.html">Forgot Password?</a>
+      </div>
+      <div id="login-error" style="color:#c00;margin-top:10px;text-align:center;"></div>
+    </div>
+  </div>
+
+  <script>
+    function validatePassword(password) {
+      // At least 1 uppercase, 1 special char, 1 number, min 8 chars
+      const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])(?=.*\d).{8,}$/;
+      return regex.test(password);
+    }
+    function validateEmail(email) {
+      // Must contain @ and .com
+      return /@.*\.com$/.test(email);
+    }
+    function validatePhone(phone) {
+      // Must be exactly 10 digits
+      return /^\d{10}$/.test(phone);
+    }
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorDiv = document.getElementById('login-error');
+      // Helper elements
+      const usernameHelp = document.getElementById('usernameHelp');
+      const emailHelp = document.getElementById('emailHelp');
+      const phoneHelp = document.getElementById('phoneHelp');
+      const passwordHelp = document.getElementById('passwordHelp');
+      const confirmPasswordHelp = document.getElementById('confirmPasswordHelp');
+      // Hide all helps
+      usernameHelp.style.display = 'none';
+      emailHelp.style.display = 'none';
+      phoneHelp.style.display = 'none';
+      passwordHelp.style.display = 'none';
+      confirmPasswordHelp.style.display = 'none';
+      errorDiv.textContent = '';
+      let hasError = false;
+      if (!username) {
+        usernameHelp.textContent = 'Username is required.';
+        usernameHelp.style.display = 'block';
+        hasError = true;
+      }
+      if (!email || !validateEmail(email)) {
+        emailHelp.textContent = 'Email must contain @ and .com.';
+        emailHelp.style.display = 'block';
+        hasError = true;
+      }
+      if (!phone || !validatePhone(phone)) {
+        phoneHelp.textContent = 'Phone must be a 10 digit number.';
+        phoneHelp.style.display = 'block';
+        hasError = true;
+      }
+      if (!validatePassword(password)) {
+        passwordHelp.textContent = 'Password must have at least 1 uppercase, 1 special character, 1 number, min 8 characters.';
+        passwordHelp.style.display = 'block';
+        hasError = true;
+      }
+      if (password !== confirmPassword) {
+        confirmPasswordHelp.textContent = 'Passwords do not match.';
+        confirmPasswordHelp.style.display = 'block';
+        hasError = true;
+      }
+      if (hasError) return;
+      // On success, redirect (replace with backend call as needed)
+      window.location.href = 'loggedin.html';
+    });
+  </script>
+</body>
+</html>
