@@ -25,16 +25,16 @@ ClassConnect offers a simple digital workflow to solve these issues.
 ---
 
 ## ✨ Features
-- 📷 **Face Recognition Attendance**: Capture faces, match with dataset, mark attendance automatically.  
-- 🌐 **Offline Support**: Works without internet, stores locally, syncs when online.  
-- 🧑‍🏫 **Manual Override**: Teachers can correct mismatches or mark manually.  
-- 📊 **Visualization**: Attendance percentage charts and student presence summaries.  
-- ⏱️ **Time Efficient**: Reduces roll-call time and improves classroom efficiency.  
+- 📷 **AI-Based Face Recognition**: Automatically detects and matches faces with the dataset to mark attendance accurately.  
+- 🌐 **Offline Functionality**: Fully operational without internet, with local data storage and automatic sync when connectivity is available.  
+- 🧑‍🏫 **Manual Override Option**: Allows teachers to edit attendance or correct recognition errors easily.  
+- 📊 **Data Visualization**: Provides attendance insights through charts and student-wise summaries.  
+- ⏱️ **Time Efficient System**: Eliminates manual roll calls, saving time and improving classroom productivity.  
 
 ---
 
 ## 🏗️ System Workflow
-Camera Capture → Dataset Matching → Attendance Marking → Local Storage → Internet Sync
+Camera Capture → Face Detection → Feature Extraction → Dataset Matching → Attendance Update → Local Storage → Internet Synchronization
 
 ---
 
