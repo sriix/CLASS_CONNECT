@@ -357,14 +357,18 @@
   </section>
   <script>
     let faceProfiles = [];
-async function loadKnownFaces() {
-  const res = await fetch('known_faces.json');
-  const faces = await res.json();
-  faceProfiles = faces.map((face, idx) => ({
-    ...face,
-    roll: face.roll || (idx + 1),
-    present: false
-  }));
+async function fetchKnownFaces() {
+  const response = await fetch('known_faces.json');
+  const data = await response.json();
+
+  faceProfiles = data.map((item, index) => {
+    return {
+      ...item,
+      roll: item.roll ?? index + 1,
+      present: false
+    };
+  });
+
   renderFaceProfiles();
 }
 
@@ -416,19 +420,21 @@ function renderFaceProfiles() {
 }
 loadKnownFaces();
 
-document.getElementById('scan-btn').onclick = function() {
-  // Find first absent student in faceProfiles
-  const nextAbsent = faceProfiles.findIndex(s => !s.present);
-  if (nextAbsent !== -1) {
-    faceProfiles[nextAbsent].present = true;
+document.getElementById('scan-btn').addEventListener('click', () => {
+  const index = faceProfiles.findIndex(profile => !profile.present);
+  const resultEl = document.getElementById('scan-result');
+
+  if (index !== -1) {
+    const student = faceProfiles[index];
+    student.present = true;
+
     renderFaceProfiles();
-    document.getElementById('scan-result').innerText =
-      "Student recognized: " + faceProfiles[nextAbsent].name + ". Attendance marked!";
+
+    resultEl.textContent = `Student recognized: ${student.name}. Attendance marked!`;
   } else {
-    document.getElementById('scan-result').innerText =
-      "All students already marked present.";
+    resultEl.textContent = "All students are already marked present.";
   }
-};
+});
     // Demo data for each class/section
     const classStudents = {
       "6B": [
